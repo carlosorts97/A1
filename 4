@@ -1,0 +1,76 @@
+index.php
+<?php
+  session_start();
+  echo'AL ataqueeeeeer';
+  if($_POST){
+    $_SESSION['atacar']=rand(1,6);
+    header('Location:ataca.php');
+}
+
+?>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+  <form action="<? $_SERVER['PHP_SELF']; ?>" method="post">
+  <p><input type="submit" value="ATACA" name="Sign up"></p>
+
+  </form>
+  </body>
+</html>
+----------------------------------------------------------------------------------------------------------------------------------
+ataca.php
+<?php
+session_start();
+echo"El atacante ha hecho ".$_SESSION['atacar']." puntos";
+echo'<br>';
+echo'<img src=img/'.$_SESSION['atacar'].'.png width=150px/>';
+if($_POST){
+  $_SESSION['defender']=rand(1,6);
+  header('Location:defensa.php');
+}
+
+?>
+
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <form action="<? $_SERVER['PHP_SELF']; ?>" method="post">
+    <p><input type="submit" value="DEFENSA" name="Sign up"></p>
+  </body>
+</html>
+---------------------------------------------------------------------------------------------------------------------------------
+defensa.php
+<?php
+session_start();
+echo"El atacante ha sacado ".$_SESSION['atacar']." puntos";
+echo'<br>';
+echo'<img src=img/'.$_SESSION['atacar'].'.png width=150px/>';
+echo'<br>';
+echo"El defesor ha sacado ".$_SESSION['defender']." puntos";
+echo'<br>';
+echo'<img src=img/'.$_SESSION['defender'].'.png width=150px/>';
+$jugada=0;
+if($_SESSION['atacar'] > $_SESSION['defender'])
+{
+  $jugada=$_SESSION['atacar']-$_SESSION['defender'];
+  echo'<br>';
+  echo '<h1>Gana el atacante '.$jugada.' puntos</h1>';
+}
+elseif ($_SESSION['atacar'] < $_SESSION['defender']) {
+  $jugada=$_SESSION['defender']-$_SESSION['atacar'];
+  echo'<br>';
+  echo '<h1>Gana el defensor '.$jugada.' puntos</h1>';
+}
+else{
+  echo'<h1>Empate</h1>';
+}
+?>
