@@ -1,0 +1,90 @@
+funciones.php
+<?php
+function numeroRepetido($array,$pos,$tam){
+for ($i=0; $i < $tam; $i++) {
+  if($array[$pos]===$array[$i] && $pos!=$i)
+  {
+    $val=TRUE;
+    $i=$tam;
+  }
+  else{
+    $val=FALSE;
+  }
+}
+return $val;
+}
+ ?>
+-------------------------------------------------------------------------------------------------------------------------------
+//index.php
+<?php
+if (isset($_POST)&&
+    !empty($_POST['box_num'])) {
+    session_start();
+    $_SESSION['boxes']=$_POST['box_num'];
+    header('Location:cajas.php');
+}
+
+ ?>
+ <!DOCTYPE html>
+ <html>
+   <head>
+     <meta charset="utf-8">
+     <title></title>
+   </head>
+   <body>
+      <form action="<? $_SERVER['PHP_SELF']; ?>" method="post">
+      <p>Indica el numero de cajas:<input type="text" name="box_num"></p>
+      <p><input type="submit" name="send" value="Crear"></p>
+    </form>
+   </body>
+ </html>
+ ---------------------------------------------------------------------------------------------------------------------------------
+ //cajas.php
+ <?php
+session_start();
+echo'<form action='.$_SERVER[PHP_SELF].' method=post>';
+for ($i=0; $i < $_SESSION['boxes']; $i++) {
+  echo'<input type=text name='.$i.'></input>';
+}
+echo'<input type=submit name=enviar value=envia>';
+echo'</form>';
+
+if($_POST){
+$caja_llena=0;
+  for ($cont_caja=0; $cont_caja<$i ; $cont_caja++) {
+      if(!empty ($_POST[$cont_caja]))
+      {
+        $_SESSION['valores'][$caja_llena]=$_POST[$cont_caja];
+
+        $caja_llena++;//Cuenta las cajas que contienen algo
+  }
+  }
+  $_SESSION['num_cajas']=$caja_llena;
+  header('Location:resultado.php');
+}
+?>
+-------------------------------------------------------------------------------------------------------------------------------
+//resultado.php
+<?php
+include('funciones.php');
+session_start();
+/*var_dump($_SESSION['num_cajas']);
+echo "<br>";
+var_dump($_SESSION['valores']);*/
+$repetidos[0]=0;
+$cont=0;
+echo'Se han llenado '.$_SESSION['num_cajas'].' cajas y se repiten el valor:';
+for ($i=0; $i <= $_SESSION['num_cajas']; $i++) {
+  if(numeroRepetido($_SESSION['valores'],$i,$_SESSION['num_cajas'])==TRUE)
+  {
+    if(!in_array($_SESSION['valores'][$i],$repetidos))
+    {
+    $repetidos[$cont]=$_SESSION['valores'][$i];
+    echo ' '.$repetidos[$cont];
+    $cont++;
+  }
+  }
+}
+
+session_unset();
+ ?>
